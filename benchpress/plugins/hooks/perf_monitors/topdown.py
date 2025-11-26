@@ -48,6 +48,8 @@ def get_cpu_vendor(cpuinfo: dict):
     arch = cpuinfo["Architecture"]
     if arch == "aarch64":
         return "arm"
+    elif arch == "riscv64":
+        return "riscv"
     elif arch == "x86_64":
         vendor_id = cpuinfo["Vendor ID"].lower()
         if "intel" in vendor_id:
@@ -393,6 +395,32 @@ class AMDPerfUtil:
             self.perfutil_zen4.write_csv()
 
 
+class RISCVPerfUtil:
+    def __init__(self, job_uuid, **kwargs):
+        self.cpuinfo = get_cpuinfo()
+        self.cpu_vendor = get_cpu_vendor(self.cpuinfo)
+        if self.cpu_vendor != "riscv":
+            raise Exception("Not an RISCV processor!")
+        self.perfutil = BasePerfUtil(
+            job_uuid,
+            "riscv-perf-collector",
+            perf_collect_script_name="collect_riscv_perf_counters.sh",
+            perf_postproc_script_name="generate_riscv_perf_report.py",
+        )
+    def run(self):
+        self.perfutil.run()
+
+    def terminate(self):
+        self.perfutil.terminate()
+
+    def gen_csv(self):
+        pass
+
+    def write_csv(self):
+        self.perfutil.write_csv()
+
+
+
 class ARMPerfUtil(Monitor):
     TOPDOWN_TOOL_URL = (
         "https://git.gitlab.arm.com/telemetry-solution/telemetry-solution.git"
@@ -519,7 +547,9 @@ def choose_perfspect():
 
 cpuinfo = get_cpuinfo()
 cpu_vendor = get_cpu_vendor(cpuinfo)
-if cpu_vendor == "intel":
+if cpu_vendor == "riscv":
+    TopDown = RISCVPerfUtil
+elif cpu_vendor == "intel":
     TopDown = choose_perfspect()
 elif cpu_vendor == "amd":
     TopDown = AMDPerfUtil
