@@ -259,7 +259,7 @@ def start(args) -> None:
     else:
         server_hostname = socket.gethostname()
     cmd = [
-        "sbin/start-slave-fb.sh",
+        "sbin/start-slave.sh",
         SPARK_CLI_ARGS["--master"],
         "-h",
         server_hostname,
@@ -299,7 +299,7 @@ def start(args) -> None:
             cmd = ["numactl", "--cpunodebind=0", "--membind=0"] + cmd
         run_cmd(full_cmd, SPARK_HOME, log_file, env, args.real)
     # shuffle server
-    cmd = ["sbin/start-shuffle-service.sh"]
+    cmd = ["sbin/start-mesos-shuffle-service.sh"]
     log_file = joinpath(WORK_PATH, "start_shuffle_service.log")
     env = {}
     if args.numa == "node0_only":
@@ -314,7 +314,7 @@ def stop(args) -> None:
     env = {"SPARK_WORKER_INSTANCES": str(args.num_workers)}
     run_cmd(cmd, SPARK_HOME, log_file, env, args.real)
     # shuffle server
-    cmd = ["sbin/stop-shuffle-service.sh"]
+    cmd = ["sbin/stop-mesos-shuffle-service.sh"]
     log_file = joinpath(WORK_PATH, "stop_shuffle_service.log")
     env = {}
     run_cmd(cmd, SPARK_HOME, log_file, env, args.real)
@@ -421,7 +421,7 @@ def setup(args, init: bool = False) -> None:
         # print(f"copying {start_slave_srcfile}")
         if args.real:
             shutil.copy(
-                start_slave_srcfile, joinpath(SPARK_HOME, "sbin", "start-slave-fb.sh")
+                start_slave_srcfile, joinpath(SPARK_HOME, "sbin", "start-slave.sh")
             )
 
 
