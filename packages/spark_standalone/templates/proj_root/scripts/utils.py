@@ -125,7 +125,7 @@ def read_environ() -> Dict[str, str]:
     env_vars["PROJ_ROOT"] = "/".join(os.path.abspath(__file__).split("/")[:-2])
     env_vars["JAVA_HOME"] = find_java_home()
     env_vars["SPARK_HOME"] = os.path.join(
-        env_vars["PROJ_ROOT"], "spark-2.4.5-bin-hadoop2.7"
+        env_vars["PROJ_ROOT"], "spark-3.5.2-RIVOS-bin-v352-rivos"
     )
     # read from actual environment
     for k in env_vars:

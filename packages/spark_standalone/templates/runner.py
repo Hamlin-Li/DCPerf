@@ -49,7 +49,7 @@ def download_dataset(args):
 
 
 def install_database(args):
-    metadata_dir = os.path.join(SPARK_DIR, "spark-2.4.5-bin-hadoop2.7", "metastore_db")
+    metadata_dir = os.path.join(SPARK_DIR, "spark-3.5.2-RIVOS-bin-v352-rivos", "metastore_db")
     database_dir = os.path.join(args.warehouse_dir, f"{SRC_DATASET}.db")
     if os.path.exists(metadata_dir) and os.path.exists(database_dir):
         print("Database already created; directly run test")

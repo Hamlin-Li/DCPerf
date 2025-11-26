@@ -11,6 +11,7 @@ SPARK_PKG_ROOT="$(dirname "$(readlink -f "$0")")"
 TEMPLATES_DIR="${SPARK_PKG_ROOT}/templates"
 LINUX_DIST_ID="$(awk -F "=" '/^ID=/ {print $2}' /etc/os-release | tr -d '"')"
 
+ignore=:'
 # Install system dependencies
 if [ "$LINUX_DIST_ID" = "ubuntu" ]; then
   apt install -y openjdk-8-jdk fio
@@ -19,6 +20,7 @@ elif [ "$LINUX_DIST_ID" = "centos" ]; then
   dnf install -y java-1.8.0-openjdk fio
   dnf install -y git-lfs
 fi
+'
 
 # copy over directory
 if [ ! -d "${OUT}/scripts" ]; then
@@ -30,10 +32,15 @@ fi
 
 # download spark
 pushd "${OUT}" || exit 1
+ignore=:'
 if [ ! -f spark-2.4.5-bin-hadoop2.7.tgz ]; then
-  wget https://archive.apache.org/dist/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz
+#  wget https://archive.apache.org/dist/spark/spark-2.4.5/spark-2.4.5-bin-hadoop2.7.tgz
+   cp /home/rivos/hamlin/workspace/tools/spark/spark-2.4.5-bin-hadoop2.7.tgz .
 fi
 tar xzf spark-2.4.5-bin-hadoop2.7.tgz
+'
+cp /home/rivos/hamlin/workspace/tools/spark/spark-3.5.2-RIVOS-bin-v352-rivos.tgz .
+tar xzf spark-3.5.2-RIVOS-bin-v352-rivos.tgz
 popd || exit 1
 
 # create sub directories
