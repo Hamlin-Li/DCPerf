@@ -64,6 +64,8 @@ def install_database(args):
         args.warehouse_dir,
         "-k",
         args.shuffle_dir,
+        "--worker-cores",
+        "4",
     ]
     if args.ipv4:
         cmd_list.append("--ipv4")
@@ -161,6 +163,8 @@ def run_test(args):
         args.warehouse_dir,
         "-k",
         args.shuffle_dir,
+        "--worker-cores",
+        "4",
     ]
     if args.ipv4:
         cmd_list.append("--ipv4")
