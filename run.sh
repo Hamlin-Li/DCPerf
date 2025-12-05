@@ -1,7 +1,13 @@
 #!/bin/bash
 
 # Usage:
-#   sudo bash run.sh
+#   sudo bash run.sh $WORK_DIR
+
+if [ $# -eq 0 ]
+  then
+    echo "No working dir supplied"
+    exit 1
+fi
 
 WORKING_DIR=$1
 source $WORKING_DIR/tools/setup_proxy.sh
